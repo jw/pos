@@ -4,6 +4,8 @@ STORE = {
     "44444": "$44.44",
 }
 
+INVALID = "[INVALID]"
+
 
 class Display:
 
@@ -20,3 +22,5 @@ class Display:
 def on_barcode(display: Display, barcode: str):
     if barcode in STORE:
         display.set_text(STORE[barcode])
+    else:
+        display.set_text(INVALID)
