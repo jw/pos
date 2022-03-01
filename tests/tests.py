@@ -1,7 +1,6 @@
 from pytest import fixture
 
-import pos.pos
-from pos.pos import Display
+from pos.pos import Display, INVALID
 
 
 @fixture
@@ -10,15 +9,15 @@ def display():
 
 
 def test_first(display):
-    pos.pos.on_barcode(display, "12345")
-    assert display.text == "$12.5"
+    display.on_barcode("12345")
+    assert f"{display}" == "[$12.5]"
 
 
 def test_nothing(display):
-    pos.pos.on_barcode(display, "")
-    assert display.text == pos.pos.INVALID
+    display.on_barcode("")
+    assert f"{display}" == INVALID
 
 
 def test_invalid(display):
-    pos.pos.on_barcode(display, "000000")
-    assert display.text == pos.pos.INVALID
+    display.on_barcode("000000")
+    assert f"{display}" == INVALID

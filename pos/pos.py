@@ -1,26 +1,53 @@
-STORE = {
-    "12345": "$12.5",
-    "33333": "$33.33",
-    "44444": "$44.44",
+from abc import ABC, abstractmethod
+from enum import Enum, auto
+from typing import Optional, Protocol
+
+STORE: dict[str, float] = {
+    "12345": 12.5,
+    "33333": 33.33,
+    "44444": 44.44,
 }
 
+
+class Status(Enum):
+    VALID = auto()
+    INVALID = auto()
+
+
+# the display when the item was not found.
 INVALID = "[INVALID]"
 
 
-class Display:
+class PointOfSale(Protocol):
+    @abstractmethod
+    def on_barcode(self, barcode: str) -> None:
+        raise NotImplementedError
+
+
+class Display(PointOfSale):
 
     def __init__(self):
-        self.text = ""
+        self._status = Status.VALID
+        self._price = 0
 
-    def set_text(self, price: str):
-        self.text = price
+    @property
+    def price(self) -> int:
+        return self._price
 
-    def __str__(self):
-        print(f"[{self.text}]")
+    @price.setter
+    def price(self, price: Optional[int]) -> None:
+        self._price = price
+        if price is None:
+            self._status = Status.INVALID
+        else:
+            self._status = Status.VALID
 
+    def __str__(self) -> str:
+        """When a valid price was given, show [$<price>] ortherwise show `INVALID`."""
+        if self._status is Status.INVALID:
+            return INVALID
+        else:
+            return f"[${self._price}]"
 
-def on_barcode(display: Display, barcode: str):
-    if barcode in STORE:
-        display.set_text(STORE[barcode])
-    else:
-        display.set_text(INVALID)
+    def on_barcode(self, barcode: str) -> None:
+        self.price = STORE.get(barcode, None)
