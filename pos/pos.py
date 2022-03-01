@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from enum import Enum, auto
 from typing import Optional, Protocol
 
@@ -25,7 +25,6 @@ class PointOfSale(Protocol):
 
 
 class Display(PointOfSale):
-
     def __init__(self):
         self._status = Status.VALID
         self._price = 0
@@ -43,7 +42,10 @@ class Display(PointOfSale):
             self._status = Status.VALID
 
     def __str__(self) -> str:
-        """When a valid price was given, show [$<price>] ortherwise show `INVALID`."""
+        """
+        When a valid price was given, show [$<price>]
+        otherwise show `INVALID`.
+        """
         if self._status is Status.INVALID:
             return INVALID
         else:
