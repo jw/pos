@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from enum import Enum, auto
-from typing import Optional, Protocol
+from typing import Protocol
 
 STORE: dict[str, float] = {
     "12345": 12.5,
@@ -14,14 +14,15 @@ class Status(Enum):
     INVALID = auto()
 
 
-# the display when the item was not found.
+# This will be displayed when the item was not
+# found or the barcode was invalid.
 INVALID = "[INVALID]"
 
 
 class PointOfSale(Protocol):
     @abstractmethod
     def on_barcode(self, barcode: str) -> None:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class Display(PointOfSale):
@@ -34,11 +35,12 @@ class Display(PointOfSale):
         return self._price
 
     @price.setter
-    def price(self, price: Optional[int]) -> None:
-        self._price = price
+    def price(self, price: int) -> None:
         if price is None or not isinstance(price, int | float):
+            self._price = -1
             self._status = Status.INVALID
         else:
+            self._price = price
             self._status = Status.VALID
 
     def __str__(self) -> str:

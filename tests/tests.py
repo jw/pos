@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from pos.pos import INVALID, Display
+from pos.pos import INVALID, Display, PointOfSale
 
 
 @fixture
@@ -38,3 +38,11 @@ def test_display_setter(display):
     assert f"{display}" == "[$42]"
     display.price = 4.2
     assert f"{display}" == "[$4.2]"
+
+
+def test_display_getter(display):
+    assert display.price == 0
+    display.price = 100
+    assert display.price == 100
+    display.price = "invalid"
+    assert display.price == -1
