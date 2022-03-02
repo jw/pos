@@ -33,9 +33,8 @@ def test_display_setter(display):
     assert f"{display}" == INVALID
     display.price = None
     assert f"{display}" == INVALID
+
     display.price = 42
     assert f"{display}" == "[$42]"
-
-
-
-
+    display.price = 4.2
+    assert f"{display}" == "[$4.2]"

@@ -36,7 +36,7 @@ class Display(PointOfSale):
     @price.setter
     def price(self, price: Optional[int]) -> None:
         self._price = price
-        if price is None or not isinstance(price, int):
+        if price is None or not isinstance(price, int | float):
             self._status = Status.INVALID
         else:
             self._status = Status.VALID
