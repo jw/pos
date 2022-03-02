@@ -21,3 +21,21 @@ def test_nothing(display):
 def test_invalid(display):
     display.on_barcode("000000")
     assert f"{display}" == INVALID
+
+
+def test_none(display):
+    display.on_barcode(None)
+    assert f"{display}" == INVALID
+
+
+def test_display_setter(display):
+    display.price = "forty-two"
+    assert f"{display}" == INVALID
+    display.price = None
+    assert f"{display}" == INVALID
+    display.price = 42
+    assert f"{display}" == "[$42]"
+
+
+
+
