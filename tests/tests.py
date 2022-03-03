@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from pos.pos import INVALID, Display, PointOfSale
+from pos.pos import INVALID, Display
 
 
 @fixture

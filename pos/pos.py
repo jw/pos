@@ -1,6 +1,4 @@
-from abc import abstractmethod
 from enum import Enum, auto
-from typing import Protocol
 
 STORE: dict[str, float] = {
     "12345": 12.5,
@@ -19,13 +17,7 @@ class Status(Enum):
 INVALID = "[INVALID]"
 
 
-class PointOfSale(Protocol):
-    @abstractmethod
-    def on_barcode(self, barcode: str) -> None:
-        raise NotImplementedError  # pragma: no cover
-
-
-class Display(PointOfSale):
+class Display:
     def __init__(self):
         self._status = Status.VALID
         self._price = 0
