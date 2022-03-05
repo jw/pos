@@ -19,6 +19,9 @@ class PointOfSale:
 
     def __init__(self, catalog: dict[str, Decimal]):
         self.catalog = catalog
+        self._reset()
+
+    def _reset(self):
         self.items = []
         self.status = Status.STARTED
 
@@ -30,6 +33,9 @@ class PointOfSale:
 
     def on_total(self) -> None:
         self.status = Status.STOPPED
+
+    def on_reset(self) -> None:
+        self._reset()
 
     def __str__(self):
         """Shows

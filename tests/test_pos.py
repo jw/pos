@@ -109,3 +109,32 @@ def test_manual_more_invalid_total_entry(weird_pos):
         f"{weird_pos}"
         == f"001: $0.50\n002: [INVALID]\n003: [INVALID]\n{LINE}\nTOT: $0.50\n"
     )
+
+
+def test_reset(pos):
+    pos.on_manual(Decimal("0.50"))
+    pos.on_reset()
+    pos.on_manual(Decimal("1"))
+    pos.on_barcode("12345")
+    pos.on_total()
+    assert f"{weird_pos}" f"001: $1.00\n002: $10.00\n{LINE}\nTOT: $11.00\n"
+
+
+def test_multiple_resets_and_restart(pos):
+    pos.on_reset()
+    pos.on_reset()
+    pos.on_reset()
+    assert f"{weird_pos}" f""
+    pos.on_total()
+    assert f"{weird_pos}" f"{LINE}\nTOT: $0.00\n"
+    pos.on_manual(Decimal("1.1111111"))
+    assert f"{weird_pos}" f"001: $1.11\n"
+    pos.on_barcode("11111")
+    assert f"{weird_pos}" f"001: $1.11\n001: $0.20\n"
+    pos.on_reset()
+    assert f"{weird_pos}" f""
+
+
+def test_total_onloy(pos):
+    pos.on_total()
+    assert f"{weird_pos}" f"{LINE}\nTOT: $0.00\n"
