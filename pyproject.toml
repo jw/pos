@@ -12,6 +12,10 @@ pytest = "^7.0.0"
 black = "^22.1.0"
 pre-commit = "^2.17.0"
 pytest-cov = "^3.0.0"
+taskipy = "^1.10.1"
+
+[tool.taskipy.tasks]
+test = "pytest --cov --cov-report html --cov-report xml"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
