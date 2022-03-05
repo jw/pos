@@ -84,3 +84,28 @@ def test_invalid_barcode(invalid_pos):
         f"{invalid_pos}"
         == f"001: $1.11\n002: [INVALID]\n003: [INVALID]\n{LINE}\nTOT: $1.11\n"
     )
+
+
+def test_manual_entry(invalid_pos):
+    invalid_pos.on_manual(Decimal("0.50"))
+    assert f"{invalid_pos}" == "001: $0.50\n"
+
+
+def test_manual_invalid_total_entry(invalid_pos):
+    invalid_pos.on_manual(Decimal("0.50"))
+    invalid_pos.on_manual("invalid")
+    assert f"{invalid_pos}" == "001: $0.50\n002: [INVALID]\n"
+    invalid_pos.on_total()
+    assert f"{invalid_pos}" == f"001: $0.50\n002: [INVALID]\n{LINE}\nTOT: $0.50\n"
+
+
+def test_manual_more_invalid_total_entry(invalid_pos):
+    invalid_pos.on_manual(Decimal("0.50"))
+    invalid_pos.on_manual("invalid")
+    invalid_pos.on_barcode("333333")
+    assert f"{invalid_pos}" == "001: $0.50\n002: [INVALID]\n003: [INVALID]\n"
+    invalid_pos.on_total()
+    assert (
+        f"{invalid_pos}"
+        == f"001: $0.50\n002: [INVALID]\n003: [INVALID]\n{LINE}\nTOT: $0.50\n"
+    )

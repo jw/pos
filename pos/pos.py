@@ -21,8 +21,10 @@ class PointOfSale:
         self.status = Status.STARTED
 
     def on_barcode(self, barcode: str) -> None:
-        self.status = Status.STARTED
         self.items.append(self.catalog.get(barcode, None))
+
+    def on_manual(self, price: Decimal) -> None:
+        self.items.append(price)
 
     def on_total(self) -> None:
         self.status = Status.STOPPED
