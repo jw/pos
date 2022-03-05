@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from pos.pos import PointOfSale
+from pos.pos import LINE, PointOfSale
 
 CATALOG: dict[str, float] = {
     "12345": 10.0,
@@ -28,3 +28,14 @@ def test_two_items(pos):
     pos.on_barcode("54321")
     pos.on_barcode("11111")
     assert f"{pos}" == "001: $0.1\n002: $0.2\n"
+
+
+def test_one_item_total(pos):
+    pos.on_barcode("11111")
+    pos.on_total()
+    assert f"{pos}" == f"001: $0.2\n{LINE}\nTOT: $0.2\n"
+
+
+def test_no_item_total(pos):
+    pos.on_total()
+    assert f"{pos}" == f"{LINE}\nTOT: $0.0\n"

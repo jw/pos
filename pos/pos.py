@@ -1,5 +1,7 @@
 from enum import Enum, auto
 
+LINE = "-------------"
+
 
 class Status(Enum):
     STARTED = auto()
@@ -18,9 +20,10 @@ class PointOfSale:
         self.status = Status.STARTED
 
     def on_barcode(self, barcode: str) -> None:
+        self.status = Status.STARTED
         self.items.append(self.catalog.get(barcode, None))
 
-    def on_total(self, barcode: str) -> None:
+    def on_total(self) -> None:
         self.status = Status.STOPPED
 
     def __str__(self):
@@ -40,6 +43,6 @@ class PointOfSale:
                 price_as_str = INVALID
             result += f"{i:03}: {price_as_str}\n"
         if self.status == Status.STOPPED:
-            result += "-------------"
-            result += f"TOT: ${total}"
+            result += f"{LINE}\n"
+            result += f"TOT: ${total}\n"
         return result
