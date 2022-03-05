@@ -37,7 +37,7 @@ class PointOfSale:
         result = ""
         total = Decimal(0)
         for i, price in enumerate(self.items, start=1):
-            if price:
+            if isinstance(price, Decimal):
                 total += price
                 price_as_str = f"${price:.2f}"
             else:
