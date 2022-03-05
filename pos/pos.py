@@ -39,11 +39,11 @@ class PointOfSale:
         for i, price in enumerate(self.items, start=1):
             if price:
                 total += price
-                price_as_str = f"${price}"
+                price_as_str = f"${price:.2f}"
             else:
                 price_as_str = INVALID
             result += f"{i:03}: {price_as_str}\n"
         if self.status == Status.STOPPED:
             result += f"{LINE}\n"
-            result += f"TOT: ${total}\n"
+            result += f"TOT: ${total:.2f}\n"
         return result
