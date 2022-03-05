@@ -12,7 +12,7 @@ CATALOG: dict[str, Decimal] = {
 }
 
 
-CATALOG_WITH_EMPTY_AND_INVALID: dict[str, Decimal] = {
+CATALOG_WITH_EMPTY_AND_INVALID_ENTRIES: dict[str, Decimal] = {
     "11111": Decimal("1.11"),
     "22222": None,
     "33333": "invalid",
@@ -25,8 +25,8 @@ def pos():
 
 
 @fixture
-def invalid_pos():
-    return PointOfSale(CATALOG_WITH_EMPTY_AND_INVALID)
+def weird_pos():
+    return PointOfSale(CATALOG_WITH_EMPTY_AND_INVALID_ENTRIES)
 
 
 def test_one_item(pos):
@@ -74,38 +74,38 @@ def test_wrong_barcode(pos):
     )
 
 
-def test_invalid_barcode(invalid_pos):
-    invalid_pos.on_barcode("11111")
-    invalid_pos.on_barcode("22222")
-    invalid_pos.on_barcode("33333")
-    assert f"{invalid_pos}" == "001: $1.11\n002: [INVALID]\n003: [INVALID]\n"
-    invalid_pos.on_total()
+def test_invalid_barcode(weird_pos):
+    weird_pos.on_barcode("11111")
+    weird_pos.on_barcode("22222")
+    weird_pos.on_barcode("33333")
+    assert f"{weird_pos}" == "001: $1.11\n002: [INVALID]\n003: [INVALID]\n"
+    weird_pos.on_total()
     assert (
-        f"{invalid_pos}"
+        f"{weird_pos}"
         == f"001: $1.11\n002: [INVALID]\n003: [INVALID]\n{LINE}\nTOT: $1.11\n"
     )
 
 
-def test_manual_entry(invalid_pos):
-    invalid_pos.on_manual(Decimal("0.50"))
-    assert f"{invalid_pos}" == "001: $0.50\n"
+def test_manual_entry(weird_pos):
+    weird_pos.on_manual(Decimal("0.50"))
+    assert f"{weird_pos}" == "001: $0.50\n"
 
 
-def test_manual_invalid_total_entry(invalid_pos):
-    invalid_pos.on_manual(Decimal("0.50"))
-    invalid_pos.on_manual("invalid")
-    assert f"{invalid_pos}" == "001: $0.50\n002: [INVALID]\n"
-    invalid_pos.on_total()
-    assert f"{invalid_pos}" == f"001: $0.50\n002: [INVALID]\n{LINE}\nTOT: $0.50\n"
+def test_manual_invalid_total_entry(weird_pos):
+    weird_pos.on_manual(Decimal("0.50"))
+    weird_pos.on_manual("invalid")
+    assert f"{weird_pos}" == "001: $0.50\n002: [INVALID]\n"
+    weird_pos.on_total()
+    assert f"{weird_pos}" == f"001: $0.50\n002: [INVALID]\n{LINE}\nTOT: $0.50\n"
 
 
-def test_manual_more_invalid_total_entry(invalid_pos):
-    invalid_pos.on_manual(Decimal("0.50"))
-    invalid_pos.on_manual("invalid")
-    invalid_pos.on_barcode("333333")
-    assert f"{invalid_pos}" == "001: $0.50\n002: [INVALID]\n003: [INVALID]\n"
-    invalid_pos.on_total()
+def test_manual_more_invalid_total_entry(weird_pos):
+    weird_pos.on_manual(Decimal("0.50"))
+    weird_pos.on_manual("invalid")
+    weird_pos.on_barcode("333333")
+    assert f"{weird_pos}" == "001: $0.50\n002: [INVALID]\n003: [INVALID]\n"
+    weird_pos.on_total()
     assert (
-        f"{invalid_pos}"
+        f"{weird_pos}"
         == f"001: $0.50\n002: [INVALID]\n003: [INVALID]\n{LINE}\nTOT: $0.50\n"
     )

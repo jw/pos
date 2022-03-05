@@ -15,6 +15,8 @@ INVALID = "[INVALID]"
 
 
 class PointOfSale:
+    """The point of sale."""
+
     def __init__(self, catalog: dict[str, Decimal]):
         self.catalog = catalog
         self.items = []
