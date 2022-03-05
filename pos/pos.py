@@ -38,7 +38,7 @@ class PointOfSale:
                 price_as_str = f"${price}"
             else:
                 price_as_str = INVALID
-            result += f"{i:03}: {price_as_str}"
+            result += f"{i:03}: {price_as_str}\n"
         if self.status == Status.STOPPED:
             result += "-------------"
             result += f"TOT: ${total}"
