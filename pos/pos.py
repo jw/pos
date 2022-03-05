@@ -1,3 +1,4 @@
+from decimal import Decimal
 from enum import Enum, auto
 
 LINE = "-------------"
@@ -14,7 +15,7 @@ INVALID = "[INVALID]"
 
 
 class PointOfSale:
-    def __init__(self, catalog: dict[str, float]):
+    def __init__(self, catalog: dict[str, Decimal]):
         self.catalog = catalog
         self.items = []
         self.status = Status.STARTED
@@ -34,7 +35,7 @@ class PointOfSale:
         TOT: $<total>
         """
         result = ""
-        total = 0.0
+        total = Decimal(0)
         for i, price in enumerate(self.items, start=1):
             if price:
                 total += price
