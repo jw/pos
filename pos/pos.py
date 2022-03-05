@@ -1,15 +1,9 @@
 from enum import Enum, auto
 
-STORE: dict[str, float] = {
-    "12345": 12.5,
-    "33333": 33.33,
-    "44444": 44.44,
-}
-
 
 class Status(Enum):
-    VALID = auto()
-    INVALID = auto()
+    STARTED = auto()
+    STOPPED = auto()
 
 
 # This will be displayed when the item was not
@@ -17,33 +11,35 @@ class Status(Enum):
 INVALID = "[INVALID]"
 
 
-class Display:
-    def __init__(self):
-        self._status = Status.VALID
-        self._price = 0
-
-    @property
-    def price(self) -> int:
-        return self._price
-
-    @price.setter
-    def price(self, price: int) -> None:
-        if price is None or not isinstance(price, int | float):
-            self._price = -1
-            self._status = Status.INVALID
-        else:
-            self._price = price
-            self._status = Status.VALID
-
-    def __str__(self) -> str:
-        """
-        When a valid price was given, show [$<price>]
-        otherwise show `INVALID`.
-        """
-        if self._status is Status.INVALID:
-            return INVALID
-        else:
-            return f"[${self._price}]"
+class PointOfSale:
+    def __init__(self, catalog: dict[str, float]):
+        self.catalog = catalog
+        self.items = []
+        self.status = Status.STARTED
 
     def on_barcode(self, barcode: str) -> None:
-        self.price = STORE.get(barcode, None)
+        self.items.append(self.catalog.get(barcode, None))
+
+    def on_total(self, barcode: str) -> None:
+        self.status = Status.STOPPED
+
+    def __str__(self):
+        """Shows
+        001: $<price>
+        002: $<price>
+        -------------
+        TOT: $<total>
+        """
+        result = ""
+        total = 0.0
+        for i, price in enumerate(self.items, start=1):
+            if price:
+                total += price
+                price_as_str = f"${price}"
+            else:
+                price_as_str = INVALID
+            result += f"{i:03}: {price_as_str}"
+        if self.status == Status.STOPPED:
+            result += "-------------"
+            result += f"TOT: ${total}"
+        return result
