@@ -135,6 +135,6 @@ def test_multiple_resets_and_restart(pos):
     assert f"{weird_pos}" f""
 
 
-def test_total_onloy(pos):
+def test_total_only(pos):
     pos.on_total()
     assert f"{weird_pos}" f"{LINE}\nTOT: $0.00\n"
